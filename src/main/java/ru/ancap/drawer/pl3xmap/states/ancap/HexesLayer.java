@@ -20,14 +20,14 @@ import java.util.*;
 import java.util.List;
 
 public class HexesLayer extends WorldLayer {
-
+    
     public static final String KEY = "ancap_hexagons";
-
+    
     public HexesLayer(World world) {
         super(KEY, world, () -> "Территории");
         super.setPriority(50);
     }
-
+    
     @Override
     public @NotNull Collection<Marker<?>> getMarkers() {
         Collection<Marker<?>> markers = new HashSet<>();
@@ -36,7 +36,7 @@ public class HexesLayer extends WorldLayer {
             return markers;
         }
         List<Marker<?>> list = new ArrayList<>();
-        for (City city : AncapStates.getCityMap().getCities()) {
+        for (City city : AncapStates.cityMap().cities()) {
             for (Hexagon hex : city.getTerritories()) {
                 Polygon polygon = new Polygon(
                     "hex_" + hex.code(),
@@ -51,7 +51,7 @@ public class HexesLayer extends WorldLayer {
                     .stroke(false)
                 );
                 list.add(polygon);
-
+                
                 if (new WarHexagon(hex.code()).devastation() instanceof WarHexagon.DevastationStatus.Devastated devastated) {
                     list.add(new Icon(DrawUtil.nextId(), devastated.brokenCastleLocation().getBlockX(), devastated.brokenCastleLocation().getBlockZ(), "warning"));
                 }
@@ -60,5 +60,5 @@ public class HexesLayer extends WorldLayer {
         markers.addAll(list);
         return markers;
     }
-
+    
 }

@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
-@Accessors(fluent = true) @Getter
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Accessors(fluent = true)
+@Getter @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum ASCustomIcon {
     
     BLUE_FLAG("blue_flag"),

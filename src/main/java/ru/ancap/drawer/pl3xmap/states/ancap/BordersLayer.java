@@ -15,14 +15,14 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class BordersLayer extends WorldLayer {
-
+    
     public static final String KEY = "ancap_borders";
-
+    
     public BordersLayer(World world) {
         super(KEY, world, () -> "Границы");
         super.setPriority(51);
     }
-
+    
     @Override
     public @NotNull Collection<Marker<?>> getMarkers() {
         Collection<Marker<?>> markers = new HashSet<>();
@@ -30,7 +30,7 @@ public class BordersLayer extends WorldLayer {
         if (bukkitWorld == null) {
             return markers;
         }
-        markers.addAll(AncapStates.getCityMap().getCities().stream()
+        markers.addAll(AncapStates.cityMap().cities().stream()
             .flatMap(city -> AncapStates.grid.region(new HashSet<>(city.getTerritories())).bounds().stream()
                 .map(side -> {
                     var start = side.start();

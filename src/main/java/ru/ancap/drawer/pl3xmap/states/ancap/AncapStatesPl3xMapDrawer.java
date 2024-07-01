@@ -8,12 +8,12 @@ import ru.ancap.commons.resource.ResourceSource;
 import ru.ancap.framework.plugin.api.AncapPlugin;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.util.Objects;
 
 public final class AncapStatesPl3xMapDrawer extends AncapPlugin {
-
+    
     public static AncapStatesPl3xMapDrawer INSTANCE;
-
+    
     @Override
     public void onEnable() {
         super.onEnable();
@@ -37,7 +37,7 @@ public final class AncapStatesPl3xMapDrawer extends AncapPlugin {
     
     @SneakyThrows
     private static void registerIconFromDir(IconRegistry registry, ResourceSource<BufferedImage> resourceSource, String key) {
-        registry.register(key, new IconImage(key, resourceSource.getResource(key+".png"), "png"));
+        registry.register(key, new IconImage(key, Objects.requireNonNull(resourceSource.getResource(key + ".png")), "png"));
     }
     
     @Override

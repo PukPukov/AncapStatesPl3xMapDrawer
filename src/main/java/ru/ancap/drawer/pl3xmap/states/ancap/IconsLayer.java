@@ -20,32 +20,32 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class IconsLayer extends WorldLayer {
-
+    
     public static final String KEY = "ancap_city_icons";
-
+    
     public IconsLayer(World world) {
         super(KEY, world, () -> "Значки государств");
         super.setPriority(51);
     }
-
+    
     @Override
     public @NotNull Collection<Marker<?>> getMarkers() {
         Collection<Marker<?>> markers = new HashSet<>();
         org.bukkit.World bukkitWorld = Bukkit.getWorld(super.getWorld().getName());
         if (bukkitWorld == null) return markers;
-        for (City city : AncapStates.getCityMap().getCities()) {
+        for (City city : AncapStates.cityMap().cities()) {
             ASCustomIcon icon = ASCustomIcon.BLUE_FLAG;
             if (city.isFree()) icon = ASCustomIcon.GREEN_FLAG;
-            else if (city.getMayor().isLeader()) icon = ASCustomIcon.KING;
+            else if (city.mayor().isLeader()) icon = ASCustomIcon.KING;
             markers.add(new Icon(DrawUtil.nextId(), DrawUtil.locationToPl3xPoint(city.getHome()), icon.key()).setOptions(Options.builder()
                 .popup(new Popup(String.join("<br>", city.getDescription().description())))
             ));
             for (FieldConflict conflict : AncapWars.fieldConflicts().attacksTo(WarState.of(city.id()).warActor())) {
                 markers.add(new Icon(DrawUtil.nextId(), DrawUtil.hexagonPointToPl3x(AncapStates.grid.hexagon(conflict.hexagon().code())), ASCustomIcon.FIRE.key()).setOptions(Options.builder()
                     .popup(new Popup(
-                        "Гексагон под атакой!<br>"+
-                        "Атакующий: "+conflict.attacker().getName()+"<br>"+
-                        "Процент захвата: "+((1 - ((double) conflict.health() / (double) conflict.maxHealth())) * 100)
+                        "Гексагон под атакой!<br>" +
+                            "Атакующий: " + conflict.attacker().getName() + "<br>" +
+                            "Процент захвата: " + ((1 - ((double) conflict.health() / (double) conflict.maxHealth())) * 100)
                     ))
                 ));
             }
@@ -55,9 +55,9 @@ public class IconsLayer extends WorldLayer {
             if (AncapWars.assaults().assault(castle.hexagon().code()) instanceof AssaultRuntime.Realized realized) {
                 markers.add(new Icon(DrawUtil.nextId(), DrawUtil.locationToPl3xPoint(castle.getLocation()), ASCustomIcon.SHIELD.key()).setOptions(Options.builder()
                     .popup(new Popup(
-                        castle.name() + "<br>" + 
-                        "Замок под атакой!<br>"+
-                        "Атакующий: "+realized.attacker().getName()
+                        castle.name() + "<br>" +
+                            "Замок под атакой!<br>" +
+                            "Атакующий: " + realized.attacker().getName()
                     ))
                 ));
             } else {
@@ -69,5 +69,5 @@ public class IconsLayer extends WorldLayer {
         }
         return markers;
     }
-
+    
 }

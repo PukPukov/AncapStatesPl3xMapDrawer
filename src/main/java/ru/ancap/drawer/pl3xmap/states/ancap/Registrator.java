@@ -12,7 +12,6 @@ import net.pl3x.map.core.image.IconImage;
 import net.pl3x.map.core.world.World;
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import ru.ancap.commons.Pair;
 
@@ -26,7 +25,7 @@ import java.util.List;
 
 public class Registrator implements EventListener, Listener {
     
-    private Registrator() { }
+    private Registrator() {}
     
     public static Registrator init() {
         var registrator = new Registrator();
@@ -37,21 +36,21 @@ public class Registrator implements EventListener, Listener {
     public void register() {
         Pl3xMap.api().getEventRegistry().register(this);
     }
-
+    
     @EventHandler
     public void onPl3xMapEnabled(@NotNull Pl3xMapEnabledEvent event) {
     }
-
+    
     @EventHandler
     public void onServerLoaded(@NotNull ServerLoadedEvent event) {
         Pl3xMap.api().getWorldRegistry().forEach(this::registerWorld);
     }
-
+    
     @EventHandler
     public void onWorldLoaded(@NotNull WorldLoadedEvent event) {
         registerWorld(event.getWorld());
     }
-
+    
     @EventHandler
     public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
         try {
@@ -59,25 +58,27 @@ public class Registrator implements EventListener, Listener {
         } catch (Throwable ignore) {
         }
     }
-
+    
     @SneakyThrows
     private void registerWorld(@NotNull World world) {
         File folder = new File(AncapStatesPl3xMapDrawer.INSTANCE.getDataFolder(), "icons");
         folder.mkdirs();
-
+        
         List<Pair<String, BufferedImage>> images;
-        try (var paths = Files.list(Paths.get(folder.getAbsolutePath()))) { images = paths
-            .filter(Files::isRegularFile)
-            .map(file -> {
-                try { return new Pair<>(FilenameUtils.getBaseName(file.getFileName().toString()), ImageIO.read(file.toFile())); } 
-                catch (IOException e) { throw new RuntimeException(e); }
-            })
-            .toList();
+        try (var paths = Files.list(Paths.get(folder.getAbsolutePath()))) {
+            images = paths
+                .filter(Files::isRegularFile)
+                .map(file -> {
+                    try {
+                        return new Pair<>(FilenameUtils.getBaseName(file.getFileName().toString()), ImageIO.read(file.toFile()));
+                    } catch (IOException e) {throw new RuntimeException(e);}
+                })
+                .toList();
         }
         
         images.forEach(image -> {
             try {
-                Pl3xMap.api().getIconRegistry().register(image.getKey(), new IconImage(image.getKey(), image.getValue(), "png"));
+                Pl3xMap.api().getIconRegistry().register(image.key(), new IconImage(image.key(), image.value(), "png"));
             } catch (Exception exception) {
                 System.err.println(exception.getClass().getSimpleName());
             }
