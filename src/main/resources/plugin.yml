@@ -1,0 +1,10 @@
+name: AncapStatesPl3xMapDrawer
+version: '${project.version}'
+main: ru.ancap.drawer.pl3xmap.states.ancap.AncapStatesPl3xMapDrawer
+api-version: 1.20.6
+
+softdepend:
+  - Artifex
+  - AncapStates
+  - AncapWars
+  - Pl3xMap
